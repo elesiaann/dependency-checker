@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dependency Checker — Flag outdated &amp; vulnerable packages</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="#6366f1"/>
+          <path d="M8 16L14 22L24 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="logo-text">DepChecker</span>
+      </div>
+      <nav class="nav">
+        <a href="#how-it-works">How it works</a>
+        <a href="https://github.com/elesiaann/dependency-checker" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">Free &amp; Open Source</div>
+        <h1 class="hero-title">Flag Outdated &amp; Vulnerable<br/>Packages Instantly</h1>
+        <p class="hero-subtitle">
+          Paste your <code>package.json</code> or <code>requirements.txt</code> and get an instant
+          report of outdated dependencies and known security vulnerabilities.
+        </p>
+        <div class="tab-switcher">
+          <button class="tab-btn active" data-tab="npm">npm (package.json)</button>
+          <button class="tab-btn" data-tab="pypi">PyPI (requirements.txt)</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="checker-section">
+      <div class="container">
+        <div class="checker-card">
+          <!-- npm panel -->
+          <div class="tab-panel active" id="panel-npm">
+            <div class="input-header">
+              <label for="npm-input">Paste your <code>package.json</code> contents</label>
+              <button class="btn-load-example" data-target="npm-input" data-type="npm">Load example</button>
+            </div>
+            <textarea id="npm-input" class="code-input" placeholder='{\n  "dependencies": {\n    "react": "^17.0.0",\n    "axios": "^0.21.0"\n  }\n}' spellcheck="false"></textarea>
+            <button class="btn-check" id="npm-check-btn">
+              <span class="btn-text">Check Dependencies</span>
+              <span class="btn-spinner hidden"></span>
+            </button>
+          </div>
+
+          <!-- PyPI panel -->
+          <div class="tab-panel" id="panel-pypi">
+            <div class="input-header">
+              <label for="pypi-input">Paste your <code>requirements.txt</code> contents</label>
+              <button class="btn-load-example" data-target="pypi-input" data-type="pypi">Load example</button>
+            </div>
+            <textarea id="pypi-input" class="code-input" placeholder="requests==2.25.0&#10;flask==1.1.2&#10;numpy==1.19.0" spellcheck="false"></textarea>
+            <button class="btn-check" id="pypi-check-btn">
+              <span class="btn-text">Check Dependencies</span>
+              <span class="btn-spinner hidden"></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div id="results-section" class="results-section hidden">
+          <div class="results-header">
+            <h2 class="results-title">Scan Results</h2>
+            <div class="results-meta" id="results-meta"></div>
+          </div>
+          <div class="summary-cards" id="summary-cards"></div>
+          <div class="results-table-wrap">
+            <table class="results-table" id="results-table">
+              <thead>
+                <tr>
+                  <th>Package</th>
+                  <th>Current</th>
+                  <th>Latest</th>
+                  <th>Status</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody id="results-body"></tbody>
+            </table>
+          </div>
+          <div class="export-bar">
+            <button class="btn-export" id="btn-export-json">Export JSON</button>
+            <button class="btn-export" id="btn-export-csv">Export CSV</button>
+            <button class="btn-copy" id="btn-copy-md">Copy as Markdown</button>
+          </div>
+        </div>
+
+        <div id="error-section" class="error-section hidden">
+          <div class="error-card">
+            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span id="error-message"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+      <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Paste your manifest</h3>
+            <p>Copy and paste your <code>package.json</code> or <code>requirements.txt</code> into the text area above.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Live registry check</h3>
+            <p>We query the <strong>npm Registry</strong> or <strong>PyPI API</strong> in real-time to fetch the latest available version for each package.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Get your report</h3>
+            <p>Packages are flagged as <span class="badge badge-up-to-date">Up-to-date</span>, <span class="badge badge-outdated">Outdated</span>, or <span class="badge badge-error">Error</span> with actionable update commands.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="supported-section">
+      <div class="container">
+        <h2 class="section-title">Supported Ecosystems</h2>
+        <div class="ecosystem-grid">
+          <div class="ecosystem-card">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/npm.svg" alt="npm" width="40" height="40" />
+            <span>npm</span>
+          </div>
+          <div class="ecosystem-card">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/python.svg" alt="PyPI" width="40" height="40" />
+            <span>PyPI</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>
+        Built with love &amp; open source.
+        <a href="https://github.com/elesiaann/dependency-checker" target="_blank" rel="noopener">View on GitHub</a>
+      </p>
+      <p class="footer-note">Data is fetched directly from npm and PyPI registries. Nothing is stored.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
